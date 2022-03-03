@@ -4,7 +4,7 @@ export class Address {
     public zipCode: string,
     public street: string,
     public number: string,
-    public complemnet: string,
+    public complement: string,
     public neighborhood: string,
     public city: string,
     public state: string,

@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UseInterceptors } from '@nestjs/common';
-import { ValidatorIterceptor } from 'src/interceptors/validator.interceptor';
-import { CreateCustomerContract } from '../contracts/customer.contracts';
+import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
+import { CreateaAddressContract } from '../contracts/customer/create-address.contract';
+import { CreateCustomerContract } from '../contracts/customer/create-customer.contract';
 import { CreateCustomerDto } from '../dtos/create-customer-dto';
+import { Address } from '../models/address.model';
 import { Customer } from '../models/customer.model';
 import { Result } from '../models/result.model';
 import { User } from '../models/user.model';
@@ -29,7 +31,7 @@ export class CustomerController {
   }
 
   @Post()
-  @UseInterceptors(new ValidatorIterceptor(new CreateCustomerContract()))
+  @UseInterceptors(new ValidatorInterceptor(new CreateCustomerContract()))
   async post(@Body() model: CreateCustomerDto) {
     try {
       const user =  await this.accountService.create(
@@ -41,6 +43,18 @@ export class CustomerController {
       return new Result('Cliente criado com sucesso!', true, customerResponse, null);
     } catch (error) {
       throw new HttpException(new Result('Não foi possível realizar seu cadastro.', false, null, error), HttpStatus.BAD_REQUEST)
+    }
+  }
+
+  @Post(':document/addresses/billing')
+  @UseInterceptors(new ValidatorInterceptor(new CreateaAddressContract()))
+  async addBillingAddress(@Param('document') document, @Body() model: Address) {
+    try {
+      const customerResponse = await this.customerService.addBillingAddress(document, model);
+
+      return customerResponse;
+    } catch (error) {
+      throw new HttpException(new Result('Não foi possível adicionar seu endereço.', false, null, error), HttpStatus.BAD_REQUEST)
     }
   }
 

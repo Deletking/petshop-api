@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
+import { CreateCustomerDto } from '../../dtos/create-customer-dto';
 import { Flunt } from 'src/utils/flunt';
-import { CreateCustomerDto } from '../dtos/create-customer-dto';
-import { Contract } from './contract';
+import { Contract } from '../contract';
 
 @Injectable()
 export class CreateCustomerContract implements Contract {

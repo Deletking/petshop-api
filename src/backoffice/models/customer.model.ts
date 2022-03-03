@@ -10,8 +10,8 @@ export class Customer {
     public document: string,
     public email: string,
     public pets: Pet[],
-    public billingAdress: Address,
-    public shippingAdress: Address,
+    public billingAddress: Address,
+    public shippingAddress: Address,
     public creditCard: CreditCard,
     public user: User
   ) { }

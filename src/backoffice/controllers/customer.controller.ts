@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { ValidatorIterceptor } from 'src/interceptors/validator.interceptor';
 import { CreateCustomerContract } from '../contracts/customer.contracts';
 import { CreateCustomerDto } from '../dtos/create-customer-dto';
@@ -31,13 +31,17 @@ export class CustomerController {
   @Post()
   @UseInterceptors(new ValidatorIterceptor(new CreateCustomerContract()))
   async post(@Body() model: CreateCustomerDto) {
-    const user =  await this.accountService.create(
-      new User(model.document, model.password, true)
-    );
-    const customer = new Customer(model.name, model.document, model.email, null, null, null, null, user);
-    const customerResponse = await this.customerService.create(customer);
-
-    return new Result('Cliente criado com sucesso!', true, customerResponse, null)
+    try {
+      const user =  await this.accountService.create(
+        new User(model.document, model.password, true)
+      );
+      const customer = new Customer(model.name, model.document, model.email, null, null, null, null, user);
+      const customerResponse = await this.customerService.create(customer);
+  
+      return new Result('Cliente criado com sucesso!', true, customerResponse, null);
+    } catch (error) {
+      throw new HttpException(new Result('Não foi possível realizar seu cadastro.', false, null, error), HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Put(':document')

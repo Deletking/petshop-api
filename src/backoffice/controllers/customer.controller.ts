@@ -52,7 +52,19 @@ export class CustomerController {
     try {
       const customerResponse = await this.customerService.addBillingAddress(document, model);
 
-      return customerResponse;
+      return new Result('Endereço de fatura atualizado.', true, customerResponse, null);
+    } catch (error) {
+      throw new HttpException(new Result('Não foi possível adicionar seu endereço.', false, null, error), HttpStatus.BAD_REQUEST)
+    }
+  }
+  
+  @Post(':document/addresses/shipping')
+  @UseInterceptors(new ValidatorInterceptor(new CreateaAddressContract()))
+  async addShippingAddress(@Param('document') document, @Body() model: Address) {
+    try {
+      const customerResponse = await this.customerService.addShippingAddress(document, model);
+
+      return new Result('Endereço de entrega atualizado.', true, customerResponse, null);
     } catch (error) {
       throw new HttpException(new Result('Não foi possível adicionar seu endereço.', false, null, error), HttpStatus.BAD_REQUEST)
     }

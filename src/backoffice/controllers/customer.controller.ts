@@ -76,7 +76,7 @@ export class CustomerController {
   @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
   async createPet(@Param('document') document, @Body() model: Pet) {
     try {
-      await this.customerService.createPet(document, model);
+      await this.customerService.createPet(document, model); 
 
       return new Result('Pet cadastrado com sucesso!.', true, model, null);
     } catch (error) {

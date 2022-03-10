@@ -83,10 +83,17 @@ export class CustomerController {
       throw new HttpException(new Result('Não foi possível criar seu pet.', false, null, error), HttpStatus.BAD_REQUEST)
     }
   }
-
-  @Put(':document')
-  put(@Param('document') document, @Body() body) {
-    return new Result('Cliente alterado com sucesso!', true, body, null)
+  
+  @Put(':document/pets/:id')
+  @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
+  async updatePet(@Param('document') document, @Param('id') id, @Body() model: Pet) {
+    try {
+      await this.customerService.updatePet(document, id, model);
+      
+      return new Result('Pet atualizado com sucesso!', true, model, null)
+    } catch (error) {
+      throw new HttpException(new Result('Não foi possível atualizar seu pet.', false, null, error), HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Delete(':document')

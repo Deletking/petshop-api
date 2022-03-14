@@ -23,14 +23,21 @@ export class CustomerController {
   ) { }
 
   @Get()
-  get() {
-    return new Result(null, true, [], null)
+  async getAll() {
+    const customersResponse = await this.customerService.findAll();
+    return new Result('Todos os clientes.', true, customersResponse, null);
   }
 
   @Get(':document')
-  getById(@Param('document') document) {
-    return new Result(null, true, { document }, null)
+  async getCustomerDetails(@Param('document') document) {
+    const customerResponse = await this.customerService.find(document);
+    return new Result('Detalhes do cliente.', true,  customerResponse, null);
   }
+
+  // @Get(':document')
+  // getById(@Param('document') document) {
+  //   return new Result(null, true, { document }, null);
+  // }
 
   @Post()
   @UseInterceptors(new ValidatorInterceptor(new CreateCustomerContract()))
@@ -90,7 +97,7 @@ export class CustomerController {
     try {
       await this.customerService.updatePet(document, id, model);
       
-      return new Result('Pet atualizado com sucesso!', true, model, null)
+      return new Result('Pet atualizado com sucesso!', true, model, null);
     } catch (error) {
       throw new HttpException(new Result('Não foi possível atualizar seu pet.', false, null, error), HttpStatus.BAD_REQUEST)
     }
@@ -98,6 +105,6 @@ export class CustomerController {
 
   @Delete(':document')
   delete(@Param('document') document) {
-    return new Result('Cliente removido com sucesso!', true, document, null)
+    return new Result('Cliente removido com sucesso!', true, document, null);
   }
 }

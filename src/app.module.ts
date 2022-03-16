@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BackofficeModule } from './backoffice/backoffice.module';
+import { BackofficeModule } from 'src/modules/backoffice/backoffice.module';
 
 @Module({
   imports: [

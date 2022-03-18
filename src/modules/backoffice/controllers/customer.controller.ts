@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 import { CreateCustomerContract } from '../contracts/customer/create-customer.contract';
-import { CreateCustomerDto } from '../dtos/create-customer.dto';
+import { UpdateCustomerContract } from '../contracts/customer/update-customer.contract';
+import { CreateCustomerDto } from '../dtos/customer/create-customer.dto';
+import { UpdateCustomerDto } from '../dtos/customer/update-customer.dto';
 import { QueryDto } from '../dtos/query.dto';
 import { Customer } from '../models/customer.model';
 import { Result } from '../models/result.model';
@@ -46,6 +48,18 @@ export class CustomerController {
       throw new HttpException(new Result('Não foi possível realizar seu cadastro.', false, null, error), HttpStatus.BAD_REQUEST)
     }
   }
+
+  @Put(':document')
+  @UseInterceptors(new ValidatorInterceptor(new UpdateCustomerContract))
+  async update(@Param('document') document, @Body() model: UpdateCustomerDto) {
+    try {
+      await this.customerService.update(document, model);
+      return new Result('Cliente atualizado com sucesso.', true, model, null);
+    } catch  (error) {
+      throw new HttpException(new Result('Não foi possível atualizar o cliente.', false, null, error), HttpStatus.BAD_REQUEST)
+    }
+  }
+
 
   @Post('query')
   async query(@Body() model: QueryDto) {

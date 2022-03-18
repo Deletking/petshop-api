@@ -5,6 +5,7 @@ import { Customer } from '../models/customer.model';
 import { Model } from 'mongoose';
 import { Address } from '../models/address.model';
 import { QueryDto } from '../dtos/query.dto';
+import { UpdateCustomerDto } from '../dtos/customer/update-customer.dto';
 
 @Injectable()
 export class CustomerService {
@@ -16,6 +17,10 @@ export class CustomerService {
         const costumer = new this.model(data);
         return await costumer.save();
     }
+
+    async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
+        return await this.model.findOneAndUpdate({ document }, data);
+    } 
 
     async findAll(): Promise<Customer[]> {
         return await this.model

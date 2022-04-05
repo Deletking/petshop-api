@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateCustomerDto } from '../../dtos/customer/create-customer.dto';
+// import { CreateCustomerDto } from '../../dtos/customer/create-customer.dto';
 import { Flunt } from 'src/utils/flunt';
 import { Contract } from '../contract';
 
@@ -8,7 +8,7 @@ import { Contract } from '../contract';
 export class CreateCustomerContract implements Contract {
     errors: any[];
 
-    validate(model: CreateCustomerDto): boolean {
+    validate(model: any): boolean {
         const flunt = new Flunt();
         
         flunt.hasMinLen(model.name, 5, 'Nome inválido');

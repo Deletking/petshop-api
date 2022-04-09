@@ -5,6 +5,8 @@ import { Customer } from '../models/customer.model';
 import { Model } from 'mongoose';
 import { Address } from '../models/address.model';
 import { QueryDto } from '../dtos/query.dto';
+import { UpdateCustomerDto } from '../dtos/customer/update-customer.dto';
+import { CreditCard } from '../models/credit-card.model';
 // import { UpdateCustomerDto } from '../dtos/customer/update-customer.dto';
 
 @Injectable()
@@ -18,9 +20,9 @@ export class CustomerService {
         return await costumer.save();
     }
 
-    // async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
-    //     return await this.model.findOneAndUpdate({ document }, data);
-    // } 
+    async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
+        return await this.model.findOneAndUpdate({ document }, data);
+    } 
 
     async findAll(): Promise<Customer[]> {
         return await this.model
@@ -48,4 +50,14 @@ export class CustomerService {
             .sort(model.sort)
             .exec();
     }
+
+    async saveOrUpdateCreditCard(document: string, data: CreditCard): Promise<Customer> {
+        const options = { upsert: true };
+        return await this.model.findOneAndUpdate({ document }, {
+            $set: {
+                card: data
+            },
+        }, options);
+    }
+
 }

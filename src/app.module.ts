@@ -7,7 +7,8 @@ import { StoreModule } from 'src/modules/store/store.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://Deletking:dq8c0yuEEnzE9nI4@cluster0.xdjbk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
+    // MongooseModule.forRoot('mongodb+srv://Deletking:dq8c0yuEEnzE9nI4@cluster0.xdjbk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'),
+    MongooseModule.forRoot('mongodb+srv://Deletking:aKUk6hziERYTtsLT@cluster0.xdjbk.mongodb.net/?retryWrites=true&w=majority'),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

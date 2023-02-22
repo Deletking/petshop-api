@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+import { JwtStrategy } from './../../shared/strategies/jwt-strategy';
+import { AuthService } from './../../shared/services/auth.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CustomerSchema } from './schemas/customer.schema';
@@ -10,10 +12,20 @@ import { AddressService } from './services/address.service';
 import { PetService } from './services/pet.service';
 import { AddressController } from './controllers/address.controller';
 import { PetController } from './controllers/pet.controller';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { AccountController } from './controllers/account.controller';
 
 @Module({
   imports: [ 
-            MongooseModule.forFeature([
+          PassportModule.register({ defaultStrategy: 'jwt'}),
+          JwtModule.register({
+            secretOrPrivateKey: '4524347624',
+            signOptions: {
+              expiresIn: 3600
+            }            
+          }),
+          MongooseModule.forFeature([
               {
                 name: 'Customer',
                 schema: CustomerSchema,
@@ -25,6 +37,7 @@ import { PetController } from './controllers/pet.controller';
             ])
           ],
   controllers: [
+    AccountController,
     AddressController,
     CustomerController,
     PetController,
@@ -34,6 +47,8 @@ import { PetController } from './controllers/pet.controller';
     AddressService,
     CustomerService,
     PetService,
+    AuthService,
+    JwtStrategy,
   ]
 })
 export class BackofficeModule {}

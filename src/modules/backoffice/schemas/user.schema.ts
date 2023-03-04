@@ -16,9 +16,18 @@ export const UserSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    roles: [{
+        type: String,
+        required: true,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }],
     active: {
         type: Boolean,
         required: true,
         default: true
     }
+}, 
+{
+ timestamps: { createdAt: 'created_at', updatedAt: 'upadted_at'}
 });

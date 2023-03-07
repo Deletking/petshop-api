@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { JwtStrategy } from './../../shared/strategies/jwt-strategy';
 import { AuthService } from './../../shared/services/auth.service';
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CustomerSchema } from './schemas/customer.schema';
 import { UserSchema } from './schemas/user.schema';
@@ -15,9 +15,12 @@ import { PetController } from './controllers/pet.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AccountController } from './controllers/account.controller';
+import { CacheModule } from '@nestjs/common/cache';
 
 @Module({
   imports: [ 
+          HttpModule,
+          CacheModule.register(),
           PassportModule.register({ defaultStrategy: 'jwt'}),
           JwtModule.register({
             secretOrPrivateKey: '4524347624',

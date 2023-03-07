@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/common/cache';
+import { Md5 } from 'md5-typescript';
 import { ValidatorInterceptor } from 'src/interceptors/validator.interceptor';
 import { CreateCreditCardCustomerContract } from '../contracts/customer/create-credit-card.contract';
 import { CreateCustomerContract } from '../contracts/customer/create-customer.contract';
@@ -25,6 +27,7 @@ export class CustomerController {
   ) { }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async getAll() {
     const customersResponse = await this.customerService.findAll();
     return new Result('Todos os clientes.', true, customersResponse, null);
@@ -40,8 +43,9 @@ export class CustomerController {
   @UseInterceptors(new ValidatorInterceptor(new CreateCustomerContract()))
   async post(@Body() model: CreateCustomerDto) {
     try {
+      const password = await Md5.init(`${model.password}${process.env.SALT_KEY}`);
       const user =  await this.accountService.create(
-        new User(model.document, model.password, true, ['user'])
+        new User(model.document, password, true, ['user'])
       );
       const customer = new Customer(model.name, model.document, model.email, null, null, null, null, user);
       const customerResponse = await this.customerService.create(customer);

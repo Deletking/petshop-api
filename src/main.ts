@@ -7,9 +7,7 @@ import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger/dist';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new CustomLogger(),
-  });
+  const app = await NestFactory.create(AppModule);
 
   app.use(compression());
 
